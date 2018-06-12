@@ -1,4 +1,4 @@
-# Synchronously Transfering files Between two files
+# Synchronously Transfering files Between two processes
 ## Programming Assignment 1 CSUF Computer Science 351
 ## This assignment has the following goals:
 1. To solidify your understanding of IPC principles.
