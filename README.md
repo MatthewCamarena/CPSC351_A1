@@ -1,7 +1,7 @@
 # Synchronously Transfering files Between two processes
 ## Programming Assignment 1 CSUF Computer Science 351
-Your Section#, Name and Email Address.
-Section #01
+Section #01 <br />
+Name and Email Address. <br />
 Camarena Matthew, camarena.matthew@csu.fullerton.edu <br />
 – The programming language you used (i.e. C or C++).
 – How to execute your program.
