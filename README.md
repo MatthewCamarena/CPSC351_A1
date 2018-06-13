@@ -2,7 +2,7 @@
 ## Programming Assignment 1 CSUF Computer Science 351
 Your Section#, Name and Email Address.
 Section #01
-Camarena Matthew, camarena.matthew@csu.fullerton.edu
+Camarena Matthew, camarena.matthew@csu.fullerton.edu <br />
 – The programming language you used (i.e. C or C++).
 – How to execute your program.
 – Whether you implemented the extra credit.
