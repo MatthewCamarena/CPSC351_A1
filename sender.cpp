@@ -23,25 +23,37 @@ void* sharedMemPtr;
 
 void init(int& shmid, int& msqid, void*& sharedMemPtr)
 {
-	/* TODO: 
-        1. Create a file called keyfile.txt containing string "Hello world" (you may do
- 		    so manually or from the code).
-	    2. Use ftok("keyfile.txt", 'a') in order to generate the key.
-		3. Use the key in the TODO's below. Use the same key for the queue
-		    and the shared memory segment. This also serves to illustrate the difference
-		    between the key and the id used in message queues and shared memory. The id
-		    for any System V objest (i.e. message queues, shared memory, and sempahores) 
-		    is unique system-wide among all SYstem V objects. Two objects, on the other hand,
-		    may have the same key.
-	 */
+	// generate key
+	const key_t key = ftok("keyfile.txt", 'a');
+	if(key == (key_t)-1)
+	{
+		perror("ftok");
+		exit(-1);
+	}
 	
+	// get id of shared memory segment
+	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, 0666 | IPC_CREAT);
+	if (shmid == -1)
+	{
+		perror("shmget");
+		exit(-1);
+	}
 
-	
-	/* TODO: Get the id of the shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE */
-	/* TODO: Attach to the shared memory */
-	/* TODO: Attach to the message queue */
-	/* Store the IDs and the pointer to the shared memory region in the corresponding parameters */
-	
+	// attach to shared memory (a value of 0 for the address parameter indicates that OS should choose the address)
+	sharedMemPtr = shmat(shmid, (void*)0, 0);
+	if (sharedMemPtr == (void*)-1)
+	{
+		perror("shmat");
+		exit(-1);
+	}
+
+	// get id of message queue
+	msqid = msgget(key, 0666 | IPC_CREAT);
+	if (msqid == -1)
+	{
+		perror("msgget");
+		exit(-1);
+	}
 }
 
 /**
@@ -53,7 +65,12 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 
 void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 {
-	/* TODO: Detach from shared memory */
+	// detach from shared memory
+	if (shmdt(sharedMemPtr) == -1)
+	{
+		perror("shmdt");
+		exit(-1);
+	}
 }
 
 /**
@@ -65,7 +82,6 @@ void send(const char* fileName)
 	/* Open the file for reading */
 	FILE* fp = fopen(fileName, "r");
 	
-
 	/* A buffer to store message we will send to the receiver. */
 	message sndMsg; 
 	
