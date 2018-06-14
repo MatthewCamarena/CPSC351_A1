@@ -4,6 +4,7 @@ Section #01 <br />
 Name and Email Address. <br />
 Camarena Matthew, camarena.matthew@csu.fullerton.edu <br />
 Jens Bernardino, jerbernard96@csu.fullerton.edu <br />
+Jordan Harvey, jpharvey@csu.fullerton.edu <br />
 – The programming language you used (i.e. C or C++).
 – How to execute your program.
 – Whether you implemented the extra credit.
