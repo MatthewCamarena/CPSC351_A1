@@ -29,25 +29,37 @@ const char recvFileName[] = "recvfile";
 
 void init(int& shmid, int& msqid, void*& sharedMemPtr)
 {
-	
-	/* TODO: 1. Create a file called keyfile.txt containing string "Hello world" (you may do
- 		    so manually or from the code).
-	         2. Use ftok("keyfile.txt", 'a') in order to generate the key.
-		 3. Use the key in the TODO's below. Use the same key for the queue
-		    and the shared memory segment. This also serves to illustrate the difference
-		    between the key and the id used in message queues and shared memory. The id
-		    for any System V object (i.e. message queues, shared memory, and sempahores) 
-		    is unique system-wide among all System V objects. Two objects, on the other hand,
-		    may have the same key.
-	 */
-	
+	// generate key
+	const key_t key = ftok("keyfile.txt", 'a');
+	if(key == (key_t)-1)
+	{
+		perror("ftok");
+		exit(-1);
+	}
 
-	
-	/* TODO: Allocate a piece of shared memory. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE. */
-	/* TODO: Attach to the shared memory */
-	/* TODO: Create a message queue */
-	/* Store the IDs and the pointer to the shared memory region in the corresponding parameters */
-	
+	// allocate shared memory
+	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, 0666 | IPC_CREAT);
+	if (shmid == -1)
+	{
+		perror("shmget");
+		exit(-1);
+	}
+
+	// attach to shared memory (a value of 0 for the address parameter indicates that OS should choose the address)
+	sharedMemPtr = shmat(shmid, (void*)0, 0);
+	if (sharedMemPtr == (void*)-1)
+	{
+		perror("shmat");
+		exit(-1);
+	}
+
+	// create message queue
+	msqid = msgget(key, 0666 | IPC_CREAT);
+	if (msqid == -1)
+	{
+		perror("msgget");
+		exit(-1);
+	}
 }
  
 
@@ -120,11 +132,26 @@ void mainLoop()
 
 void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 {
-	/* TODO: Detach from shared memory */
+	// detach from shared memory
+	if (shmdt(sharedMemPtr) == -1)
+	{
+		perror("shmdt");
+		exit(-1);
+	}
+
+	// deallocate shared memory chunk
+	if (shmctl(shmid, IPC_RMID, NULL) == -1)
+	{
+		perror("shmctl");
+		exit(-1);
+	}
 	
-	/* TODO: Deallocate the shared memory chunk */
-	
-	/* TODO: Deallocate the message queue */
+	// deallocate message queue
+	if (msgctl(msqid, IPC_RMID, NULL) == -1)
+	{
+		perror("msgctl");
+		exit(-1);
+	}
 }
 
 /**
