@@ -196,6 +196,7 @@ void ctrlCSignal(int signal)
 {
 	/* Free system V resources */
 	cleanUp(shmid, msqid, sharedMemPtr);
+	exit(0);
 }
 
 int main(int argc, char** argv)
