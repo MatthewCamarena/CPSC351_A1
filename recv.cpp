@@ -80,17 +80,23 @@ void mainLoop()
 		perror("fopen");	
 		exit(-1);
 	}
-		
-    /* TODO: Receive the message and get the message size. The message will 
-     * contain regular information. The message will be of SENDER_DATA_TYPE
-     * (the macro SENDER_DATA_TYPE is defined in msg.h).  If the size field
-     * of the message is not 0, then we copy that many bytes from the shared
-     * memory region to the file. Otherwise, if 0, then we close the file and
-     * exit.
-     *
-     * NOTE: the received file will always be saved into the file called
-     * "recvfile"
-     */
+
+	message rcvMsg;
+	if (msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0) == -1)
+	{
+		perror("msgrcv");
+		exit(-1);
+	}
+	else
+	{
+		msgSize = rcvMsg.size;
+		if (msgSize == 0)
+		{
+			// message of size 0 indicates end of transfer
+			fclose(fp);
+			return;
+		}
+	}
 
 	/* Keep receiving until the sender set the size to 0, indicating that
  	 * there is no more data to send
@@ -106,17 +112,44 @@ void mainLoop()
 			{
 				perror("fwrite");
 			}
-			
-			/* TODO: Tell the sender that we are ready for the next file chunk. 
- 			 * I.e. send a message of type RECV_DONE_TYPE (the value of size field
- 			 * does not matter in this case). 
- 			 */
+
+			// send message to sender indicating that we are ready to read the next file chunk
+			message readyMsg;
+			readyMsg.mtype = RECV_DONE_TYPE;
+			if (msgsnd(msqid, &readyMsg, 0, 0) == -1)
+			{
+				perror("msgsnd");
+				exit(-1);
+			}
+
+			// receive next message chunk, if any
+			message rcvMsg;
+			if (msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0) == -1)
+			{
+				perror("msgrcv next chunk");
+				exit(-1);
+			}
+			else
+			{
+				msgSize = rcvMsg.size;
+				/*
+				if (msgSize == 0)
+				{
+					// message of size 0 indicates end of transfer
+					fclose(fp);
+
+					return;
+				}
+				*/
+			}
 		}
 		/* We are done */
 		else
 		{
 			/* Close the file */
 			fclose(fp);
+
+			return;
 		}
 	}
 }
@@ -167,12 +200,8 @@ void ctrlCSignal(int signal)
 
 int main(int argc, char** argv)
 {
-	
-	/* TODO: Install a singnal handler (see signaldemo.cpp sample file).
- 	 * In a case user presses Ctrl-c your program should delete message
- 	 * queues and shared memory before exiting. You may add the cleaning functionality
- 	 * in ctrlCSignal().
- 	 */
+	// override default signal handler
+	signal(SIGINT, ctrlCSignal); 
 				
 	/* Initialize */
 	init(shmid, msqid, sharedMemPtr);
@@ -180,7 +209,8 @@ int main(int argc, char** argv)
 	/* Go to the main loop */
 	mainLoop();
 
-	/** TODO: Detach from shared memory segment, and deallocate shared memory and message queue (i.e. call cleanup) **/
-		
+	/* Cleanup */ 
+	cleanUp(shmid, msqid, sharedMemPtr);
+	
 	return 0;
 }

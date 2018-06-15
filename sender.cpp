@@ -82,12 +82,6 @@ void send(const char* fileName)
 	/* Open the file for reading */
 	FILE* fp = fopen(fileName, "r");
 	
-	/* A buffer to store message we will send to the receiver. */
-	message sndMsg; 
-	
-	/* A buffer to store message received from the receiver. */
-	message rcvMsg;
-	
 	/* Was the file open? */
 	if(!fp)
 	{
@@ -98,6 +92,13 @@ void send(const char* fileName)
 	/* Read the whole file */
 	while(!feof(fp))
 	{
+		/* A buffer to store message we will send to the receiver. */
+		message sndMsg;
+		sndMsg.mtype = SENDER_DATA_TYPE; 
+		
+		/* A buffer to store message received from the receiver. */
+		message rcvMsg;
+
 		/* Read at most SHARED_MEMORY_CHUNK_SIZE from the file and store them in shared memory. 
  		 * fread will return how many bytes it has actually read (since the last chunk may be less
  		 * than SHARED_MEMORY_CHUNK_SIZE).
@@ -107,27 +108,34 @@ void send(const char* fileName)
 			perror("fread");
 			exit(-1);
 		}
-		
-			
-		/* TODO: Send a message to the receiver telling him that the data is ready 
- 		 * (message of type SENDER_DATA_TYPE) 
- 		 */
-		
-		/* TODO: Wait until the receiver sends us a message of type RECV_DONE_TYPE telling us 
- 		 * that he finished saving the memory chunk. 
- 		 */
+
+		// send message to receiver indicating that data is ready
+		if (msgsnd(msqid, &sndMsg, sizeof(sndMsg), 0) == -1)
+		{
+			perror("msgsnd");
+			exit(-1);
+		}
+
+		// wait until receiver says that he has finished saving the memory chunk
+		if (msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), RECV_DONE_TYPE, 0) == -1)
+		{
+			perror("msgrcv");
+			exit(-1);
+		}
+	}
+
+	// we have finished sending the file, tell receiver that we have nothing more to send
+	message sndMsgFinish;
+	sndMsgFinish.mtype = SENDER_DATA_TYPE;
+	sndMsgFinish.size = 0;
+	if (msgsnd(msqid, &sndMsgFinish, sizeof(sndMsgFinish), 0) == -1)
+	{
+		perror("msgsnd finish");
+		exit(-1);
 	}
 	
-
-	/** TODO: once we are out of the above loop, we have finished sending the file.
- 	  * Lets tell the receiver that we have nothing more to send. We will do this by
- 	  * sending a message of type SENDER_DATA_TYPE with size field set to 0. 	
-	  */
-
-		
 	/* Close the file */
 	fclose(fp);
-	
 }
 
 
