@@ -5,16 +5,21 @@ Name and Email Address. <br />
 Camarena Matthew, camarena.matthew@csu.fullerton.edu <br />
 Jens Bernardino, jerbernard96@csu.fullerton.edu <br />
 Jordan Harvey, jpharvey@csu.fullerton.edu <br />
-– The programming language you used (i.e. C or C++).
-– How to execute your program.
-– Whether you implemented the extra credit.
-– Anything special about your submission that we should take note of.
-## This assignment has the following goals:
-1. To solidify your understanding of IPC principles.
-2. To develop greater appreciation for the different IPC mechanisms.
-3. To gain hands-on experience using shared memory.
-4. To gain hands-on experience using message queues.
-5. To gain hands-on experience using signals.
-6. To learn how to combine shared memory and message queues in order to
-implement a practical application where the sender process sends information
-to the receiver process.
+## The programming language we used 
+* C++
+## How to run the program.
+– On Mac OS BASH terminal
+Here's a link to any Bash commands you could possibly need to use during this excercise: https://gist.github.com/poopsplat/7195274
+1. Enter the the directory through your bash terminal to where this program's files are kept.
+2. Create a textfile containing any message of your choosing 
+3. Type make into the terminal and hit enter to execute.
+4. Type ./sender <nameoftextfile>.txt and hit enter to execute.
+5. Create a new terminal window.
+6. Enter the directory where your program files are. 
+7. Type ./recv and hit enter.
+8. To view your message you can now type 'nano recvfile' into the terminal to view your message.
+
+## Extra credit was not implemented in this project.
+
+## Teamwork
+- 
