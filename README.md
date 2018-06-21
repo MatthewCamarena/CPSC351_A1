@@ -5,6 +5,8 @@ Name and Email Address. <br />
 Camarena Matthew, camarena.matthew@csu.fullerton.edu <br />
 Jens Bernardino, jerbernard96@csu.fullerton.edu <br />
 Jordan Harvey, jpharvey@csu.fullerton.edu <br />
+Patrick Myers, pmyers@csu.fullerton.edu <br />
+
 ## Programming language used 
 * C++
 ## How to run the program.
@@ -22,7 +24,13 @@ Here's a link to any Bash commands you could possibly need to use during this ex
 
 ## Screenshot of one Testing
 <img width="1153" alt="testscreenshot" src="https://user-images.githubusercontent.com/23159301/41701552-b9312762-74e1-11e8-95cd-e4d8a1ac04fd.png">
+
 ## Extra credit was not implemented in this project.
 
 ## Teamwork
-- 
+We broke down the parts of the project into managable subassignments for each team member.
+- Coding Jordan Harvey / Code Review done as a team.
+- README.md done by Matthew Camarena
+- Documentation done by Jens Bernardino/ 
+- Testing done as a team.
+- Taring and submission: 
