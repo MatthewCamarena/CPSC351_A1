@@ -21,7 +21,7 @@ Here's a link to any Bash commands you could possibly need to use during this ex
 8. To view your message you can now type 'nano recvfile' into the terminal to view your message.
 
 ## Screenshot of one Testing
-
+<img width="1153" alt="testscreenshot" src="https://user-images.githubusercontent.com/23159301/41701552-b9312762-74e1-11e8-95cd-e4d8a1ac04fd.png">
 ## Extra credit was not implemented in this project.
 
 ## Teamwork
