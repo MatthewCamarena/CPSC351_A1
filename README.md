@@ -28,9 +28,9 @@ Here's a link to any Bash commands you could possibly need to use during this ex
 ## Extra credit was not implemented in this project.
 
 ## Teamwork
-We broke down the parts of the project into managable subassignments for each team member.
+We broke down the parts of the project into managable sub assignments for each team member.
 - Coding Jordan Harvey / Code Review done as a team.
 - README.md done by Matthew Camarena
-- Documentation done by Jens Bernardino/ 
-- Testing done as a team.
+- Documentation done by Jens Bernardino/ Patrick Myers 
+- Testing done as a team for different environments MACOSx, and UBUNTO.
 - Taring and submission: 
