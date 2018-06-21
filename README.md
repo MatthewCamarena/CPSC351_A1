@@ -20,6 +20,8 @@ Here's a link to any Bash commands you could possibly need to use during this ex
 7. Type './recv' and hit enter.
 8. To view your message you can now type 'nano recvfile' into the terminal to view your message.
 
+## Screenshot of one Testing
+
 ## Extra credit was not implemented in this project.
 
 ## Teamwork
